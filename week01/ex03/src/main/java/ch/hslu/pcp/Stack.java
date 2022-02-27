@@ -43,6 +43,7 @@ public class Stack implements Stackable {
         }
 
         elements[index--] = null;
+        elements[index].setNext(null);
         return true;
     }
 
