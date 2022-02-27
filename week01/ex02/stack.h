@@ -23,6 +23,9 @@ stack push(element e, stack s);
 element top(stack s);
 stack pop(stack s);
 void print(stack s);
+int isEmpty(stack s);
+int size(stack s);
+stack clear(stack s); // reasonable for convenience only? structs are called by value - so no memory reason.
 
 #endif	/* STACK_H */
 

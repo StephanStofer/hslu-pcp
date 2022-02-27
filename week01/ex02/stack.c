@@ -63,3 +63,17 @@ void print(stack s) {
         printf("print - Stack is empty\n");
     }
 }
+
+// returns 1 when stack is empty, zero otherwise.
+int isEmpty(stack s) {
+    return s.index == STACK_EMPTY_INDEX;
+}
+
+// returns amount of elements in the stack.
+int size(stack s) {
+    return s.index + 1;
+}
+
+stack clear(stack s){
+    return init();
+}
