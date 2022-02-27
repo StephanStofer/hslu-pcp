@@ -6,7 +6,7 @@ package ch.hslu.pcp;
 public interface Stackable {
 
     /**
-     * element to stack.
+     * add element to stack.
      *
      * @param e an Element.
      */
