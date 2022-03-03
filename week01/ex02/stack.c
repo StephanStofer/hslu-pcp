@@ -74,6 +74,6 @@ int size(stack s) {
     return s.index + 1;
 }
 
-stack clear(stack s){
+stack clear(stack s) {
     return init();
 }
