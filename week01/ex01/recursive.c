@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "recursive.h"
 
-void printNumbersRecursiveFunction(int n){
+void printNumbersRecursiveFunction(int n) {
     if (n > 0) {
         printNumbersRecursiveFunction(n - 1);
     }

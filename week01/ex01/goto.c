@@ -5,10 +5,10 @@
 #include "goto.h"
 #include <stdio.h>
 
-void printNumbersGoto(int n){
+void printNumbersGoto(int n) {
     int counter = 0;
     START:
-    if (n >= counter){
+    if (n >= counter) {
         printf("%d ", counter);
         counter++;
         goto START;
