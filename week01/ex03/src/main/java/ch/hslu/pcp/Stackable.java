@@ -8,9 +8,9 @@ public interface Stackable {
     /**
      * add element to stack.
      *
-     * @param e an Element.
+     * @param element an Element.
      */
-    void push(Element e);
+    void push(Element element);
 
     /**
      * returns top element.
