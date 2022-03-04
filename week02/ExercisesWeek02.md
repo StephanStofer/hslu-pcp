@@ -6,6 +6,10 @@ Install swi-prolog
 
 ```console
 brew install swi-prolog
+```
+
+run swi-prolog in cli
+```console
 swipl
 ```
 
