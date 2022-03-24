@@ -9,6 +9,7 @@
 % tests
 % get: http_get('http://wherever.ch/pcp.txt', Reply, []).
 % post: http_post('http://localhost:16316/test',json(['say hi to http post']),SolutionResponse,[]).
+% better json parsing: json([firstPerson=FirstPerson, problemKey=ProblemKey, relationship=Relationship, secondPerson=SecondPerson]) - source R.Arnold
 
 send_request(ProblemType, Id, Response) :-
     format(atom(RequestUrl), 'http://localhost:16316/problem/~s/~d',[ProblemType, Id]),
