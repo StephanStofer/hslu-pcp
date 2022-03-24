@@ -14,7 +14,7 @@ send_request(ProblemType, Id, Response) :-
     format(atom(RequestUrl), 'http://localhost:16316/problem/~s/~d',[ProblemType, Id]),
         http_get(RequestUrl, json(Response), []).
 
-send_reponse(ProblemType, Id, Solution) :-
+send_response(ProblemType, Id, Solution) :-
     format(atom(ResponseUrl), 'http://localhost:16316/problem/~s',ProblemType),
         http_post(ResponseUrl,json(json([solution=Solution,problemKey=Id])),_,[]).
 
@@ -25,8 +25,7 @@ solve(relationship, Id) :-
     member(relationship=Relationship, Reply),
     member(secondPerson=SecondPerson, Reply),
     handle_relationship_problem(Relationship, FirstPerson, SecondPerson, Solution),
-    writef('Solution of Problem is: ', [Solution]),
-    send_reponse(relationship, ProblemKey, Solution).
+    send_response(relationship, ProblemKey, Solution).
 
 solve(sudoku, Id) :-
 	send_request(sudoku, Id, Reply),
@@ -35,8 +34,7 @@ solve(sudoku, Id) :-
     maplist(replace_0, Sudoku, Puzzle),
     Puzzle = [A,B,C,D,E,F,G,H,I],
     sudoku([A,B,C,D,E,F,G,H,I]),
-    writef('Solution of Problem is: ', [Puzzle]),
-    send_reponse(sudoku, ProblemKey, Puzzle).
+    send_response(sudoku, ProblemKey, Puzzle).
 
 handle_relationship_problem(Predicate, FirstPerson, SecondPerson, Result) :-
     call(Predicate, FirstPerson, SecondPerson), 
