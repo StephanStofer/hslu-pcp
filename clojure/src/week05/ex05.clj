@@ -4,8 +4,12 @@
 (defn square [x]
   (* x x))
 
+(defn pythagoras [a b]
+  (Math/sqrt (+ (square a) (square b)))
+  )
+
 (defn diagonal-rectangle [x y]
-  (Math/sqrt (+ (square x) (square y))))
+  (pythagoras x y))
 
 ;; PCP Aufgabe 3
 
@@ -16,7 +20,8 @@
 ;; PCP Aufgabe 7
 (defrecord Point [x y])
 (defn distance-to-origin [p]
-  (Math/sqrt (+ (square (:x p)) (square (:y p)))))
+  (pythagoras (:x p) (:y p))
+  )
 
 
 ;; PCP Aufgabe 8
