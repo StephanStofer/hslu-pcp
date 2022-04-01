@@ -1,6 +1,11 @@
 (ns week05.ex05_tests
   (:require [clojure.test :refer :all]
             [week05.ex05 :refer :all]))
+(defn abs [x]
+  (max x (- x)))
+
+(defn within [x y epsilon]
+  (<= (abs (- x y)) epsilon))
 
 (deftest diagonal-rectangle-test
   (is (= (diagonal-rectangle 1 1) (Math/sqrt 2)))
@@ -34,8 +39,8 @@
   (is (= (b-origin "dfdf") "not a human!"))
   (is (= (b-origin (->human 2 "m" 3)) 75.803))
   (is (= (b-origin (->human 2 "f" 3)) 68.363))
-  (is (= (b-origin (->human 32 "f" 19)) 105.615))
-  (is (= (b-origin (->human 42 "m" 33)) 143.723))
+  (is (= (within (b-origin (->human 32 "f" 19)) 105.615 0.0001)))
+  (is (= (within (b-origin (->human 42 "m" 33)) 143.723 0.0001)))
   )
 
 (run-tests)
