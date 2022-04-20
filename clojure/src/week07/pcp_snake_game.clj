@@ -3,7 +3,7 @@
   (:import (java.awt Color Dimension)
            (java.awt.event ActionListener KeyListener)
            (javax.swing JFrame JOptionPane JPanel Timer)))
-(import-static java.awt.event.KeyEvent VK_LEFT VK_RIGHT VK_UP VK_DOWN)
+(import-static java.awt.event.KeyEvent VK_LEFT VK_RIGHT VK_UP VK_DOWN VK_ESCAPE VK_R)
 
 
 ;;region Global Declaration
@@ -22,6 +22,9 @@
            VK_RIGHT [1 0]
            VK_UP    [0 -1]
            VK_DOWN  [0 1]})
+(def canvas-width (inc width))
+(def canvas-height (inc height))
+(def level (atom nil))
 
 ;;endregion
 
@@ -68,10 +71,19 @@
 (defn win? [{body :body}]
   (>= (count body) win-length))
 
-(defn head-overlaps-body? [{[head & body] :body}]
-  (contains? (set body) head))
+(defn head-overlaps-body? [[head & tail]]
+  (contains? (set tail) head))
 
-(def lose? head-overlaps-body?)
+(defn head-touches-border? [[[x y]]]
+  (or (>= x canvas-width)
+      (>= y canvas-height)
+      (< x 0)
+      (< y 0)))
+
+(defn lose? [{body :body}]
+  (or (head-overlaps-body? body)
+      (head-touches-border? body)))
+
 
 (defn eats? [{[snake-head] :body} {apple :location}]
   (= snake-head apple))
@@ -108,6 +120,17 @@
 (defmethod paint :snake [g {:keys [body color]}]            ; <label id="code.paint.snake"/>
   (doseq [point body]
     (fill-point g point color)))
+
+(defn quit []
+  (.setDefaultCloseOperation (System/exit 0))
+  )
+
+(defn set-level [input]
+  (cond
+    (= input "beginner") 25.5
+    (= input "pros") 0.2
+    :else 1)
+  )
 ;;endregion
 
 ;;region Game
@@ -122,6 +145,7 @@
 ; (If the keyboard input is not an arrow key, the dirs function returns nil and update-direction does nothing.) The game panel
 ; ignores keyReleased and keyTyped.
 (defn game-panel [frame snake apple]
+  (reset! level (set-level (JOptionPane/showInputDialog frame "Choose level - beginner, normal, pros:" "normal")))
   (proxy [JPanel ActionListener KeyListener] []
     (paintComponent [g]                                     ; <label id="code.game-panel.paintComponent"/>
       (proxy-super paintComponent g)
@@ -136,8 +160,13 @@
         (reset-game snake apple)
         (JOptionPane/showMessageDialog frame "You win!"))
       (.repaint this))
-    (keyPressed [e]                                         ; <label id="code.game-panel.keyPressed"/>
-      (update-direction snake (dirs (.getKeyCode e))))
+    (keyPressed [e]
+      (cond
+        (= (.getKeyCode e) VK_ESCAPE) (quit)
+        (= (.getKeyCode e) VK_R) (reset-game snake apple)
+        :else
+        (update-direction snake (dirs (.getKeyCode e))))
+      )
     (getPreferredSize []
       (Dimension. (* (inc width) point-size)
                   (* (inc height) point-size)))
@@ -149,7 +178,7 @@
         apple (ref (create-apple))
         frame (JFrame. "Snake")
         panel (game-panel frame snake apple)
-        timer (Timer. turn-millis panel)]
+        timer (Timer. (* @level turn-millis) panel)]
     (doto panel
       (.setFocusable true)
       (.addKeyListener panel))
